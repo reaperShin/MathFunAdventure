@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # --- Setup and Build Job (runs once) ---
+  # --- Setup and Build Job (Explicitly uses the solution file) ---
   build:
     runs-on: ubuntu-latest
     steps:
@@ -17,27 +17,31 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x' # Adjust this to your required .NET version (e.g., 6.0.x, 7.0.x)
+          dotnet-version: '8.0.x' # <-- CHECK AND ADJUST .NET VERSION
 
       - name: Restore dependencies
-        run: dotnet restore
+        # 1. FIX: Explicitly target the solution file for restore
+        run: dotnet restore KerwinTesting.sln 
         
       - name: Build solution
+        # 2. FIX: Explicitly target the solution file for build
+        # Replace 'KerwinTesting.sln' with your actual solution file name
         run: dotnet build KerwinTesting.sln --no-restore --configuration Release
         
       - name: Upload Build Artifacts
-        # This step is crucial for the subsequent test jobs to use the built files
         uses: actions/upload-artifact@v4
         with:
           name: built-project
           path: .
           
-  # --- Test Jobs (depend on the build job and run in parallel) ---
+  # --- Test Jobs (Explicitly uses the test project file) ---
 
   run_editmode_tests:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # ... (Artifact Download and .NET setup steps omitted for brevity, they remain the same) ...
+
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -50,18 +54,16 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Run EditMode Tests
-        # This command runs tests, targeting the specific test project/DLL.
-        # It uses '--filter' to only run tests whose fully qualified name
-        # contains 'EditMode'. Adjust the filter as necessary if tests are
-        # only grouped by namespace, not class name/folder.
-        # NOTE: You might need to change 'KerwinTesting.Tests.csproj' 
-        # to your actual test project name if it's different.
+        # 3. FIX: Explicitly target the specific test project file for testing
+        # Ensure the path/filename is correct for your test project
         run: dotnet test KerwinTesting.Tests.csproj --no-build --filter "FullyQualifiedName~EditMode"
 
   run_other_tests:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # ... (Artifact Download and .NET setup steps omitted for brevity, they remain the same) ...
+
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -74,6 +76,6 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Run Other Tests
-        # This command uses '--filter' to exclude any tests that contain 'EditMode'
-        # in their fully qualified name, catching tests like 'UnitTest1.cs'.
+        # 4. FIX: Explicitly target the specific test project file for testing
+        # Ensure the path/filename is correct for your test project
         run: dotnet test KerwinTesting.Tests.csproj --no-build --filter "FullyQualifiedName!~EditMode"
