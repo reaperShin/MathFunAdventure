@@ -34,13 +34,7 @@ jobs:
       - name: Build project
         # Explicitly target the solution
         run: dotnet build ${{ needs.vars.outputs.solution_name }} --no-restore --configuration Release
-        
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: built-project
-          path: .
-          
+  
   # --- Test Jobs (Run Tests against the mocked Unity APIs) ---
 
   run_editmode_tests:
