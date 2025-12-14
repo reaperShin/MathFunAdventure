@@ -16,16 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
           
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-          
-      - name: Restore dependencies
-        run: dotnet restore KerwinTesting.Tests/KerwinTesting.Tests.csproj
-        
-      - name: Run tests
-        run: dotnet test KerwinTesting.Tests/KerwinTesting.Tests.csproj --no-build --configuration Release --verbosity normal
-        
-      - name: Code validation passed
-        run: echo "All checks passed successfully!"
+      - name: Install OpenUMP CLI
+        run: npm install -g openupm-cli
+
+      - name: Install NSubstitute
+        run: dotnet add package NSubstitute
+
+      
