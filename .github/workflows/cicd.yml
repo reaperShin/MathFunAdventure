@@ -23,6 +23,6 @@ jobs:
         run: dotnet restore KerwinTesting.sln
 
       - name: Install NSubstitute
-        run: dotnet add KerwinTesting.Tests/KerwinTesting.Tests.csproj package NSubstitut
+        run: dotnet add KerwinTesting.Tests/KerwinTesting.Tests.csproj package NSubstitute
 
       
