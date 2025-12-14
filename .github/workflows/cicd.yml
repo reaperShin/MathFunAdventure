@@ -22,8 +22,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
         
-      - name: Build project
-        run: dotnet build --no-restore --configuration Release
+      - name: Build solution
+        run: dotnet build KerwinTesting.sln --no-restore --configuration Release
         
       - name: Upload Build Artifacts
         # This step is crucial for the subsequent test jobs to use the built files
