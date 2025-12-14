@@ -24,9 +24,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore KerwinTesting.Tests/KerwinTesting.Tests.csproj
         
-      - name: Build
-        run: dotnet build KerwinTesting.Tests/KerwinTesting.Tests.csproj --no-restore --configuration Release
-        
       - name: Run tests
         run: dotnet test KerwinTesting.Tests/KerwinTesting.Tests.csproj --no-build --configuration Release --verbosity normal
         
