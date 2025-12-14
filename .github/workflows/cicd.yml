@@ -1,76 +1,34 @@
-name: .NET CI - Stubbed Unity Tests
+name: CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main, develop ]
+  workflow_dispatch:
 
 jobs:
-  # Define variables for repeated use
-  vars:
-    outputs:
-      solution_name: KerwinTesting.sln # <-- REPLACE with your actual solution name
-      test_project_name: KerwinTesting.Tests.csproj # <-- REPLACE with your actual test project name
-
-  # --- Build Job (Use standard .NET) ---
-  build:
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
-    needs: vars
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          # Use the latest supported .NET version, or match your project
-          dotnet-version: '8.0.x' 
-
-      - name: Restore dependencies (Including Stubs/Mocks)
-        # Explicitly target the solution
-        run: dotnet restore ${{ needs.vars.outputs.solution_name }}
-        
-      - name: Build project
-        # Explicitly target the solution
-        run: dotnet build ${{ needs.vars.outputs.solution_name }} --no-restore --configuration Release
-  
-  # --- Test Jobs (Run Tests against the mocked Unity APIs) ---
-
-  run_editmode_tests:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: built-project
-          path: .
           
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-
-      - name: Run EditMode Tests
-        # Target your test project and filter for tests in the EditMode folder/namespace
-        run: dotnet test ${{ needs.vars.outputs.test_project_name }} --no-build --filter "FullyQualifiedName~EditMode"
-
-  run_other_tests:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: built-project
-          path: .
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Run Other Tests
-        # Target your test project and exclude tests in the EditMode folder/namespace
-        run: dotnet test ${{ needs.vars.outputs.test_project_name }} --no-build --filter "FullyQualifiedName!~EditMode"
+          
+      - name: Restore dependencies
+        run: dotnet restore KerwinTesting.Tests/KerwinTesting.Tests.csproj
+        
+      - name: Build
+        run: dotnet build KerwinTesting.Tests/KerwinTesting.Tests.csproj --no-restore --configuration Release
+        
+      - name: Run tests
+        run: dotnet test KerwinTesting.Tests/KerwinTesting.Tests.csproj --no-build --configuration Release --verbosity normal
+        
+      - name: Code validation passed
+        run: echo "All checks passed successfully!"
