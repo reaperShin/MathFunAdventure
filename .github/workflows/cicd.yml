@@ -1,4 +1,4 @@
-name: .NET CI/CD
+name: .NET CI - Stubbed Unity Tests
 
 on:
   push:
@@ -7,9 +7,16 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # --- Setup and Build Job (Explicitly uses the solution file) ---
+  # Define variables for repeated use
+  vars:
+    outputs:
+      solution_name: KerwinTesting.sln # <-- REPLACE with your actual solution name
+      test_project_name: KerwinTesting.Tests.csproj # <-- REPLACE with your actual test project name
+
+  # --- Build Job (Use standard .NET) ---
   build:
     runs-on: ubuntu-latest
+    needs: vars
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,16 +24,16 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x' # <-- CHECK AND ADJUST .NET VERSION
+          # Use the latest supported .NET version, or match your project
+          dotnet-version: '8.0.x' 
 
-      - name: Restore dependencies
-        # 1. FIX: Explicitly target the solution file for restore
-        run: dotnet restore KerwinTesting.sln 
+      - name: Restore dependencies (Including Stubs/Mocks)
+        # Explicitly target the solution
+        run: dotnet restore ${{ needs.vars.outputs.solution_name }}
         
-      - name: Build solution
-        # 2. FIX: Explicitly target the solution file for build
-        # Replace 'KerwinTesting.sln' with your actual solution file name
-        run: dotnet build KerwinTesting.sln --no-restore --configuration Release
+      - name: Build project
+        # Explicitly target the solution
+        run: dotnet build ${{ needs.vars.outputs.solution_name }} --no-restore --configuration Release
         
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
@@ -34,14 +41,12 @@ jobs:
           name: built-project
           path: .
           
-  # --- Test Jobs (Explicitly uses the test project file) ---
+  # --- Test Jobs (Run Tests against the mocked Unity APIs) ---
 
   run_editmode_tests:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # ... (Artifact Download and .NET setup steps omitted for brevity, they remain the same) ...
-
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -54,16 +59,13 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Run EditMode Tests
-        # 3. FIX: Explicitly target the specific test project file for testing
-        # Ensure the path/filename is correct for your test project
-        run: dotnet test KerwinTesting.Tests.csproj --no-build --filter "FullyQualifiedName~EditMode"
+        # Target your test project and filter for tests in the EditMode folder/namespace
+        run: dotnet test ${{ needs.vars.outputs.test_project_name }} --no-build --filter "FullyQualifiedName~EditMode"
 
   run_other_tests:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # ... (Artifact Download and .NET setup steps omitted for brevity, they remain the same) ...
-
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -76,6 +78,5 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Run Other Tests
-        # 4. FIX: Explicitly target the specific test project file for testing
-        # Ensure the path/filename is correct for your test project
-        run: dotnet test KerwinTesting.Tests.csproj --no-build --filter "FullyQualifiedName!~EditMode"
+        # Target your test project and exclude tests in the EditMode folder/namespace
+        run: dotnet test ${{ needs.vars.outputs.test_project_name }} --no-build --filter "FullyQualifiedName!~EditMode"
