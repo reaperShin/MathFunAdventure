@@ -25,4 +25,40 @@ jobs:
       - name: Install NSubstitute
         run: dotnet add KerwinTesting.Tests/KerwinTesting.Tests.csproj package NSubstitute
 
-      
+  run_editmode_tests:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: built-project
+          path: .
+          
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Run EditMode Tests
+        run: dotnet test KerwinTesting.Tests.csproj --no-build --filter "FullyQualifiedName~EditMode"
+
+  run_other_tests:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: built-project
+          path: .
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Run Other Tests
+        # This command uses '--filter' to exclude any tests that contain 'EditMode'
+        # in their fully qualified name, catching tests like 'UnitTest1.cs'.
+        run: dotnet test KerwinTesting.Tests.csproj --no-build --filter "FullyQualifiedName!~EditMode"
