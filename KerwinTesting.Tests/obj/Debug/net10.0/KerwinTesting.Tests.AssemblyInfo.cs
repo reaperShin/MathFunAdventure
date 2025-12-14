@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KerwinTesting.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+79975a6c898c7b10c54c1ea11ac969c76704fd7e")]
 [assembly: System.Reflection.AssemblyProductAttribute("KerwinTesting.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KerwinTesting.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -3,3 +3,4 @@ C:\Projects\UnityRandomProject\KerwinTesting\KerwinTesting.Tests\obj\Debug\net10
 C:\Projects\UnityRandomProject\KerwinTesting\KerwinTesting.Tests\obj\Debug\net10.0\KerwinTesting.Tests.AssemblyInfoInputs.cache
 C:\Projects\UnityRandomProject\KerwinTesting\KerwinTesting.Tests\obj\Debug\net10.0\KerwinTesting.Tests.AssemblyInfo.cs
 C:\Projects\UnityRandomProject\KerwinTesting\KerwinTesting.Tests\obj\Debug\net10.0\KerwinTesting.Tests.csproj.CoreCompileInputs.cache
+C:\Projects\UnityRandomProject\KerwinTesting\KerwinTesting.Tests\obj\Debug\net10.0\KerwinTesting.Tests.sourcelink.json
