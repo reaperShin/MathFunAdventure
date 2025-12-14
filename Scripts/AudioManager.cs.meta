@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: a2bad76a46cf13740a30621f572865c4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - sfxJump: {fileID: 8300000, guid: 3801dea314808451ca9704bcffd75ef7, type: 3}
+  - sfxCoin: {fileID: 8300000, guid: 1929e56e514e841bdbebe79dcc4aa2e5, type: 3}
+  - sfxFall: {instanceID: 0}
+  - sfxQuestionCorrect: {fileID: 8300000, guid: 973cbfce50fc9634b8c2729624d4cc4d, type: 3}
+  - sfxQuestionWrong: {fileID: 8300000, guid: 1e3f4ef5345e94cbc9996ecad61bc9e6, type: 3}
+  - sfxFinish: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant:
