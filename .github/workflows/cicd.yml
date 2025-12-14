@@ -19,6 +19,15 @@ jobs:
       - name: Install OpenUMP CLI
         run: npm install -g openupm-cli
 
+      - name: Restore
+        run: dotnet restore KerwinTesting.sln
+
+      - name: Build
+        run: dotnet build KerwinTesting.sln --no-restore
+
+      - name: Test
+        run: dotnet test KerwinTesting.sln --no-build
+
       - name: Install NSubstitute
         run: dotnet add package NSubstitute
 
