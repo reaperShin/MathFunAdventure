@@ -68,7 +68,12 @@ jobs:
           cd KerwinTesting.Tests
           dotnet test KerwinTesting.Tests.csproj --filter "FullyQualifiedName~PlayMode"
 
-   build-artifact:
+      - name: Run Build Artifact
+        run: |
+          cd KerwinTesting
+          dotnet build KerwinTesting.sln
+
+  build-artifact:
     name: Build Production Artifact
     # This job runs only if ALL your testing jobs succeed
     needs: 
