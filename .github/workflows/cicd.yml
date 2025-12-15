@@ -75,6 +75,7 @@ jobs:
 
   build-artifact:
     name: Artifact Production Build
+    needs: buildAndTest
     runs-on: ubuntu-latest
     
     steps:
