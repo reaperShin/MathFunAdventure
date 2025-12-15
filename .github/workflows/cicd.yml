@@ -78,8 +78,7 @@ jobs:
     # This job runs only if ALL your testing jobs succeed
     needs: 
       # List all your test jobs here to ensure they pass first
-      - runEditModeTests
-      - runPlayModeTests
+      - buildAndTest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
