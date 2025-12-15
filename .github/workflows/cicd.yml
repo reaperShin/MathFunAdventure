@@ -74,19 +74,21 @@ jobs:
           dotnet build KerwinTesting.sln
 
   build-artifact:
-    name: Build Production Artifact
-    # This job runs only if ALL your testing jobs succeed
-    needs: 
-      # List all your test jobs here to ensure they pass first
-      - buildAndTest
+    name: Artifact Production Build
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4 # Use v4 for better compatibility
+      - name: Checkout repository
+        uses: actions/checkout@v4
+          
+      - name: Install OpenUMP CLI
+        run: npm install -g openupm-cli
 
-      - name: Install dependencies and Build
-        run: |
-          dotnet build KerwinTesting.sln
+      - name: Restore
+        run: dotnet restore KerwinTesting.sln
+
+      - name: Install NSubstitute
+        run: dotnet add KerwinTesting.Tests/KerwinTesting.Tests.csproj package NSubstitute
 
       - name: Upload Next.js Artifact
         uses: actions/upload-artifact@v4
