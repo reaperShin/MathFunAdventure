@@ -45,3 +45,25 @@ jobs:
         run: |
           cd KerwinTesting.Tests
           dotnet test KerwinTesting.Tests.csproj --filter "FullyQualifiedName~EditMode"
+
+
+  runPlayModeTests:
+    needs: buildAndTest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+          
+      - name: Install OpenUMP CLI
+        run: npm install -g openupm-cli
+
+      - name: Restore
+        run: dotnet restore KerwinTesting.sln
+
+      - name: Install NSubstitute
+        run: dotnet add KerwinTesting.Tests/KerwinTesting.Tests.csproj package NSubstitute
+      
+      - name: Run PlayMode Tests
+        run: |
+          cd KerwinTesting.Tests
+          dotnet test KerwinTesting.Tests.csproj --filter "FullyQualifiedName~PlayMode"
