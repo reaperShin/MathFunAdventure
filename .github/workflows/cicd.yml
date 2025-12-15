@@ -67,3 +67,39 @@ jobs:
         run: |
           cd KerwinTesting.Tests
           dotnet test KerwinTesting.Tests.csproj --filter "FullyQualifiedName~PlayMode"
+
+   build-artifact:
+    name: Build Production Artifact
+    # This job runs only if ALL your testing jobs succeed
+    needs: 
+      # List all your test jobs here to ensure they pass first
+      - runEditModeTests
+      - runPlayModeTests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4 # Use v4 for better compatibility
+
+      - name: Install dependencies and Build
+        run: |
+          dotnet build KerwinTesting.sln
+
+      - name: Upload Next.js Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MathFunAdventure-Production-Build
+          path: KerwinTesting/bin/Debug/net10.0/
+          include-hidden-files: true
+          retention-days: 7
+  # =========================
+  # 📊 Test Summary
+  # =========================
+  test-summary:
+    name: Test Summary
+    needs:
+      - build-artifact
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: All Tests Complete
+        run: echo "All test suites have completed (or at least attempted)!"
